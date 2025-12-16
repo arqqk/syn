@@ -1,0 +1,160 @@
+from datetime import date
+
+# Вспомогательные функции
+
+def is_leap_year(year: int) -> bool:
+    "Високосный ли год."
+    # Правило високосного года
+    return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+
+
+def get_weekday_name(day: int, month: int, year: int) -> str:
+    "День недели для заданной даты."
+    # Используем datetime
+    dt = date(year, month, day)
+    names = [
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье",
+    ]
+    return names[dt.isoweekday() - 1]
+
+
+def calculate_age(day: int, month: int, year: int) -> int:
+    "Сколько полных лет пользователю."
+    today = date.today()
+    birth = date(year, month, day)
+    age = today.year - birth.year - (
+        (today.month, today.day) < (birth.month, birth.day)
+    )
+    return age
+
+
+# Табло
+
+DIGITS = {
+    "0": [
+        " *** ",
+        "*   *",
+        "*   *",
+        "*   *",
+        " *** ",
+    ],
+    "1": [
+        "  *  ",
+        " **  ",
+        "  *  ",
+        "  *  ",
+        " *** ",
+    ],
+    "2": [
+        " *** ",
+        "*   *",
+        "   * ",
+        "  *  ",
+        "*****",
+    ],
+    "3": [
+        " *** ",
+        "*   *",
+        "  ** ",
+        "*   *",
+        " *** ",
+    ],
+    "4": [
+        "*  * ",
+        "*  * ",
+        "*****",
+        "   * ",
+        "   * ",
+    ],
+    "5": [
+        "*****",
+        "*    ",
+        "**** ",
+        "    *",
+        "**** ",
+    ],
+    "6": [
+        " *** ",
+        "*    ",
+        "**** ",
+        "*   *",
+        " *** ",
+    ],
+    "7": [
+        "*****",
+        "   * ",
+        "  *  ",
+        " *   ",
+        "*    ",
+    ],
+    "8": [
+        " *** ",
+        "*   *",
+        " *** ",
+        "*   *",
+        " *** ",
+    ],
+    "9": [
+        " *** ",
+        "*   *",
+        " ****",
+        "    *",
+        " *** ",
+    ],
+}
+
+
+def print_big_date(day: int, month: int, year: int) -> None:
+    "Печатает дату звездочками."
+    s = f"{day:02d}{month:02d}{year:04d}"
+    rows = len(next(iter(DIGITS.values())))
+    for r in range(rows):
+        line_parts = []
+        for ch in s:
+            line_parts.append(DIGITS[ch][r])
+        print("  ".join(line_parts))
+
+
+# Основная программа
+
+def main():
+    print("Введите дату рождения.")
+    day = int(input("День (1-31): "))
+    month = int(input("Месяц (1-12): "))
+    year = int(input("Год (например, 1990): "))
+
+    # Проверка корректности даты
+    try:
+        birth = date(year, month, day)
+    except ValueError as e:
+        print("Ошибка: некорректная дата!", e)
+        return
+
+    # Проверка, что дата не в будущем
+    today = date.today()
+    if birth > today:
+        print("Ошибка: дата еще не наступила!")
+        return
+
+    weekday = get_weekday_name(day, month, year)
+    leap = is_leap_year(year)
+    age = calculate_age(day, month, year)
+
+    print()
+    print(f"Дата рождения: {day:02d}.{month:02d}.{year:04d}")
+    print(f"День недели: {weekday}")
+    print(f"Год: {'високосный' if leap else 'не високосный'}")
+    print(f"Возраст: {age} лет")
+    print()
+    print("Дата рождения:")
+    print_big_date(day, month, year)
+
+
+if __name__ == "__main__":
+    main()
