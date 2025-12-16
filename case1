@@ -10,7 +10,6 @@ def is_leap_year(year: int) -> bool:
 
 def get_weekday_name(day: int, month: int, year: int) -> str:
     "День недели для заданной даты."
-    # Используем datetime
     dt = date(year, month, day)
     names = [
         "Понедельник",
@@ -110,7 +109,7 @@ DIGITS = {
 }
 
 
-def print_big_date(day: int, month: int, year: int) -> None:
+def print_date(day: int, month: int, year: int) -> None:
     "Печатает дату звездочками."
     s = f"{day:02d}{month:02d}{year:04d}"
     rows = len(next(iter(DIGITS.values())))
@@ -153,7 +152,7 @@ def main():
     print(f"Возраст: {age} лет")
     print()
     print("Дата рождения:")
-    print_big_date(day, month, year)
+    print_date(day, month, year)
 
 
 if __name__ == "__main__":
